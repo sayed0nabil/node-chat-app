@@ -13,10 +13,16 @@ let info = [];
 app.use(express.static(rightPath));
 io.on('connection', function(socket)  {
     console.log('New User Connected');
-    socket.on('createMessage', (message) => {
-        info.push(message);
-        io.emit('newMessage', info)
-    });
+    socket.on('createMessage', (data) => {
+        socket.emit('newMessage', {
+            from: 'Admin',
+            message: 'Welcome In Chat Group'
+        })
+        socket.broadcast.emit('newMessage', {
+            from: 'Admin',
+            message: 'New Member Added'
+        })
+    })
     socket.on('disconnect', function(socket){  console.log('User Disconnected')});
 });
 // app.get('/main', (req, res) => {

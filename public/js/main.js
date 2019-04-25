@@ -3,12 +3,10 @@
 
 let socket = io();
 socket.on('connect', function()  {console.log('Connected To Server')});
-socket.on('newMessage', function(info)  {
-    console.log(info);
-});
+socket.on('newMessage', (message) => {
+    console.log(message);
+})
 const createMessage = function()  {
-    socket.emit('createMessage', {
-        message: 'Welcome From Client'
-    })
+    socket.emit('createMessage', {});
 }
 socket.on('disconnect', function()  {console.log('Disconnected From Server')});
