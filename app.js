@@ -9,10 +9,15 @@ const express = require('express'),
 const port  =  process.env.PORT || 4000;
 const server = http.createServer(app);
 const io = socketIO(server);
+let info = [];
 app.use(express.static(rightPath));
-io.on('connection', (socket) => {
+io.on('connection', function(socket)  {
     console.log('New User Connected');
-    socket.on('disconnect', (socket) => console.log('User Disconnected'));
+    socket.on('createMessage', (message) => {
+        info.push(message);
+        io.emit('newMessage', info)
+    });
+    socket.on('disconnect', function(socket){  console.log('User Disconnected')});
 });
 // app.get('/main', (req, res) => {
 //     res.sendFile(`${rightPath}/index.html`);

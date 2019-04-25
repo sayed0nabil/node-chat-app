@@ -8,11 +8,10 @@
 </head>
 <body>
     <p>Welcome in Node Chat App</p>
+    <h3>Emails</h3>
+    <div id='container'></div>
+    <button onclick='createMessage()'>Create Email</button>
     <script src='/socket.io/socket.io.js'></script>
-    <script>
-        let socket = io();
-        socket.on('connect', () => console.log('Connected To Server'));
-        socket.on('disconnect', () => console.log('Disconnected From Server'));
-    </script>
+    <script src='./js/main.js'></script>
 </body>
 </html>
