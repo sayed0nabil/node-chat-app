@@ -1,13 +1,11 @@
-const rightPath = `${__dirname}\\public`;
-
+const rightPath = `${__dirname}\\public`,
+      http      = require('http');
 // NPM packages
 const express = require('express'),
       app     = express();
 
 
-const port = 4000 || process.env.port;
+const port  =  process.env.PORT || 4000;
+const server = http.createServer(app);
 app.use(express.static(rightPath));
-app.get('/', (req, res) => {
-    res.sendFile('index.html');
-})
-app.listen(port, () => console.log(`Listening on port ${port}`))
+app.listen(port, () => console.log(`listening on port ${port}`));
