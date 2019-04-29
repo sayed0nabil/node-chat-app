@@ -7,11 +7,12 @@ socket.on('newMessage', (message) => {
     if(message.me){
         background = 'blue';
         color      = 'white';
-        message.from = 'Me'
+        message.from = 'Me';
     }
     const li = $('<li></li>');
     li.text(`${message.from}: ${message.text}`);
     li.css({
+        listStylePosition: 'inside',
         background,
         color
     })

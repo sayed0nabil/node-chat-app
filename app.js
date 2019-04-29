@@ -13,7 +13,8 @@ const io = socketIO(server);
 let info = [];
 app.use(express.static(rightPath));
 io.on('connection', function(socket)  {
-    console.log('New User Connected');
+    socket.emit('newMessage', generateMessage('Admin', 'Welcome In Node Chat App'))
+    socket.broadcast.emit('newMessage', generateMessage('Admin', 'New User Joined'));
     socket.on('createMessage', (data, callback) => {
         socket.emit('newMessage', {
             ...generateMessage(data.from, data.message),
