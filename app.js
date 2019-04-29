@@ -21,7 +21,7 @@ io.on('connection', function(socket)  {
             me: true
         })
         socket.broadcast.emit('newMessage', generateMessage(data.from, data.message))
-        // callback('Messages Sent Successfully');
+        callback();
     })
     socket.on('createLocationMessage', (coords) => {
         io.emit('newLocationMessage', generateMessage('Admin', `${coords.latitude},${coords.longitude}`))

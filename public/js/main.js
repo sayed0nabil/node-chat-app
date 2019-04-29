@@ -28,7 +28,7 @@ socket.on('newLocationMessage', message => {
     li.css({
         listStylePosition: 'inside'
     })
-    const link = $(`<a href='https://www.google.com/maps/?q=${message.text}' target='__blank' >Location</a>`);
+    const link = $(`<a href='https://www.google.com/maps/?q=${message.text}' target='__blank' >My Current Location</a>`);
     li.append('<span>Admin</span>');
     li.append(link);
     $('#messages').append(li);
@@ -41,15 +41,20 @@ $(function(){
         socket.emit('createMessage', {
             from: 'User',
             message: $('#msg').val()
+        }, function(){
+            $('#msg').val('');    
         });
-        $('#msg').val('');
+        
     })
     const locationButton = $('#location_button');
     locationButton.on('click', e => {
+        locationButton.prop('disabled', true).text('Sending location...');
         if(!navigator.geolocation){
+            locationButton.prop('disabled', false).text('Send location');
             return alert('You do not support Geolocation Api');
         }
         navigator.geolocation.getCurrentPosition(pos => {
+            locationButton.prop('disabled', false).text('Send location');
             socket.emit('createLocationMessage', {
                 latitude: pos.coords.latitude,
                 longitude: pos.coords.longitude
