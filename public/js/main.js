@@ -23,6 +23,16 @@ const createMessage = function()  {
         console.log('Got it', ack);
     });
 }
+socket.on('newLocationMessage', message => {
+    const li = $('<li></li>');
+    li.css({
+        listStylePosition: 'inside'
+    })
+    const link = $(`<a href='https://www.google.com/maps/?q=${message.text}' target='__blank' >Location</a>`);
+    li.append('<span>Admin</span>');
+    li.append(link);
+    $('#messages').append(li);
+});
 socket.on('disconnect', function()  {console.log('Disconnected From Server')});
 
 $(function(){
@@ -33,5 +43,19 @@ $(function(){
             message: $('#msg').val()
         });
         $('#msg').val('');
+    })
+    const locationButton = $('#location_button');
+    locationButton.on('click', e => {
+        if(!navigator.geolocation){
+            return alert('You do not support Geolocation Api');
+        }
+        navigator.geolocation.getCurrentPosition(pos => {
+            socket.emit('createLocationMessage', {
+                latitude: pos.coords.latitude,
+                longitude: pos.coords.longitude
+            });
+        }, err => {
+            return alert('Unable To Fetch Location');
+        })
     })
 })

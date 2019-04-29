@@ -23,6 +23,9 @@ io.on('connection', function(socket)  {
         socket.broadcast.emit('newMessage', generateMessage(data.from, data.message))
         // callback('Messages Sent Successfully');
     })
+    socket.on('createLocationMessage', (coords) => {
+        io.emit('newLocationMessage', generateMessage('Admin', `${coords.latitude},${coords.longitude}`))
+    })
     socket.on('disconnect', function(socket){  console.log('User Disconnected')});
 });
 // app.get('/main', (req, res) => {
