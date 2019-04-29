@@ -5,7 +5,8 @@ const express = require('express'),
       app     = express(),
       socketIO = require('socket.io');
 
-
+// Custom Modules
+const { generateMessage } = require('./utils/message');
 const port  =  process.env.PORT || 4000;
 const server = http.createServer(app);
 const io = socketIO(server);
@@ -13,15 +14,13 @@ let info = [];
 app.use(express.static(rightPath));
 io.on('connection', function(socket)  {
     console.log('New User Connected');
-    socket.on('createMessage', (data) => {
+    socket.on('createMessage', (data, callback) => {
         socket.emit('newMessage', {
-            from: 'Admin',
-            message: 'Welcome In Chat Group'
+            ...generateMessage(data.from, data.message),
+            me: true
         })
-        socket.broadcast.emit('newMessage', {
-            from: 'Admin',
-            message: 'New Member Added'
-        })
+        socket.broadcast.emit('newMessage', generateMessage(data.from, data.message))
+        // callback('Messages Sent Successfully');
     })
     socket.on('disconnect', function(socket){  console.log('User Disconnected')});
 });
