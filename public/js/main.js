@@ -2,21 +2,19 @@
 let socket = io();
 socket.on('connect', function()  {console.log('Connected To Server')});
 socket.on('newMessage', (message) => {
-    console.log(message);
-    let background = 'white', color = 'black';
+    const template = $('#message_template').html();
+    let color = 'text-primary';
     if(message.me){
-        background = 'blue';
-        color      = 'white';
         message.from = 'Me';
+        color = 'text-success'
     }
-    const li = $('<li></li>');
-    li.text(`${message.from}: ${message.text}`);
-    li.css({
-        listStylePosition: 'inside',
-        background,
+    const messages = Mustache.render(template, {
+        text: message.text,
+        from: message.from,
+        createdAt: message.createdAt,
         color
-    })
-    $('#messages').append(li);
+    });
+    $('#messages').append(messages);
 })
 const createMessage = function()  {
     socket.emit('createMessage', {}, function(ack){
@@ -24,14 +22,13 @@ const createMessage = function()  {
     });
 }
 socket.on('newLocationMessage', message => {
-    const li = $('<li></li>');
-    li.css({
-        listStylePosition: 'inside'
+    const locationTemplate = $('#location_message_template').html();
+    const locationMessage = Mustache.render(locationTemplate, {
+        from: message.from,
+        url: `https://www.google.com/maps/?q=${message.text}`,
+        createdAt: message.createdAt
     })
-    const link = $(`<a href='https://www.google.com/maps/?q=${message.text}' target='__blank' >My Current Location</a>`);
-    li.append('<span>Admin</span>');
-    li.append(link);
-    $('#messages').append(li);
+    $('#messages').append(locationMessage);
 });
 socket.on('disconnect', function()  {console.log('Disconnected From Server')});
 
