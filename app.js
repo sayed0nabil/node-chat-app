@@ -37,7 +37,7 @@ io.on('connection', function(socket)  {
         callback();
     })
     socket.on('createLocationMessage', (coords) => {
-        io.emit('newLocationMessage', generateMessage('Admin', `${coords.latitude},${coords.longitude}`))
+        io.to(coords.room).emit('newLocationMessage', generateMessage(coords.from, `${coords.latitude},${coords.longitude}`))
     })
     socket.on('disconnect', function(){  
         const user = users.removeUser(socket.id);
