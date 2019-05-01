@@ -13,14 +13,22 @@ const io = socketIO(server);
 let info = [];
 app.use(express.static(rightPath));
 io.on('connection', function(socket)  {
-    socket.emit('newMessage', generateMessage('Admin', 'Welcome In Node Chat App'))
-    socket.broadcast.emit('newMessage', generateMessage('Admin', 'New User Joined'));
+    socket.on('join', (params, callback) => {
+        if(params.name.trim().length === 0 || params.room.trim().length === 0){
+            callback('Name and room are required');
+        }else{
+            socket.join(params.room);
+            socket.emit('newMessage', generateMessage('Admin', 'Welcome In Node Chat App'));
+            socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.name} Joind To Room`));
+            callback();
+        }
+    })
     socket.on('createMessage', (data, callback) => {
         socket.emit('newMessage', {
             ...generateMessage(data.from, data.message),
             me: true
         })
-        socket.broadcast.emit('newMessage', generateMessage(data.from, data.message))
+        socket.broadcast.to(data.room).emit('newMessage', generateMessage(data.from, data.message))
         callback();
     })
     socket.on('createLocationMessage', (coords) => {

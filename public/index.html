@@ -6,54 +6,26 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel='stylesheet' href='./css/main.css' />
-    <title>Node-Chat-App</title>
+    <title>Join Page</title>
 </head>
 <body>
-    <p class='text-center bg-secondary text-white m-0 headline'>Welcome in Node Chat App</p>
-    <div class="row">
-        <div class="col-md-2 people">
-            <h2 class="text-white text-center">People</h2>
-        </div>
-        <div class="col-md-9 chat">
-            <div class="messages">
-                <ol id='messages'></ol> 
+    <div style='background: rgb(3, 134, 241); height: 100vh; display:flex; justify-content: center; align-items: center'>
+        <form action="/chat.html" style='height: 300px; overflow:hidden; width: 40%' class='bg-white text-primary'>
+            <h2 class='text-secondary text-center bg-dark'>Chat</h2>
+            <div class="form-group text-center">
+                <h4 for="username">Display Name</h4>
+                <input type="text" class="form-control w-75 m-auto" name='name' 
+                placeholder="Enter Display Name For Other Users" autofocus/>
             </div>
-            <div class="actions">
-                <form id='message_form' class='w-100'>
-                    <input type='text' name='message' id='msg' placeholder='Enter The message' autofocus autocomplete="off"/>
-                    <button class='btn text-white' type='submit'>Send</button>
-                    <button class='btn text-white' id='location_button' type='button'>Send location</button>
-                </form>
+            <div class="form-group text-center">
+                <h4 for="username">Room Name</h4>
+                <input type="text" class="form-control w-75 m-auto" name='room' 
+                placeholder="Enter Room Name"/>
             </div>
-        </div>
+            <div style='display: flex; justify-content: center'>
+                <input class='w-50 m-auto btn btn-outline-primary' value='Join Room' type='submit' />
+            </div>
+        </form>
     </div>
-    <script id='message_template' type='text/template'>
-        <li>
-            <div class='row'>
-                <h4 class='col-md-2'>{{ from }}</h4>
-                <span class='lead col-md-10'>{{ createdAt }}</span>
-            </div>
-            <div class={{color}}>
-                <p>{{ text }}</p>
-            </div>
-        </li>
-    </script>
-    <script id='location_message_template' type='text/template'>
-        <li>
-            <div class='row'>
-                <h4 class='col-md-2'>{{ from }}</h4>
-                <span class='lead col-md-10'>{{ createdAt }}</span>
-            </div>
-            <div class='text-primary'>
-               <a href={{url}} target='__blank'>My Current Locations</a>
-            </div>
-        </li>
-    </script>
-    <script src='/socket.io/socket.io.js'></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src='./js/jquery-3.4.0.min.js'></script>
-    <script src='./js/mustache.js'></script>
-    <script src='./js/main.js'></script>
 </body>
 </html>
