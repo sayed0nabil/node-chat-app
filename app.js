@@ -7,17 +7,22 @@ const express = require('express'),
 
 // Custom Modules
 const { generateMessage } = require('./utils/message');
+const { Users } = require('./utils/users');
 const port  =  process.env.PORT || 4000;
 const server = http.createServer(app);
 const io = socketIO(server);
 let info = [];
 app.use(express.static(rightPath));
+const users = new Users();
 io.on('connection', function(socket)  {
     socket.on('join', (params, callback) => {
         if(params.name.trim().length === 0 || params.room.trim().length === 0){
             callback('Name and room are required');
         }else{
             socket.join(params.room);
+            users.removeUser(socket.id);
+            users.addUser({id: socket.id, name: params.name, room: params.room});
+            io.to(params.room).emit('updateUsersList', users.getUserList(params.room));
             socket.emit('newMessage', generateMessage('Admin', 'Welcome In Node Chat App'));
             socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.name} Joind To Room`));
             callback();
@@ -34,7 +39,12 @@ io.on('connection', function(socket)  {
     socket.on('createLocationMessage', (coords) => {
         io.emit('newLocationMessage', generateMessage('Admin', `${coords.latitude},${coords.longitude}`))
     })
-    socket.on('disconnect', function(socket){  console.log('User Disconnected')});
+    socket.on('disconnect', function(){  
+        const user = users.removeUser(socket.id);
+        
+        io.to(user.room).emit('updateUsersList', users.getUserList(user.room));
+        io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has been left`));
+    });
 });
 // app.get('/main', (req, res) => {
 //     res.sendFile(`${rightPath}/index.html`);

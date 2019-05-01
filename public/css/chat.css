@@ -8,6 +8,20 @@
     height: 92vh;
     background: rgb(3, 134, 241);
 }
+#users{
+    margin: 0;
+    padding: 0
+}
+#users li{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    border-radius: 10px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    background: #EEE;
+}
 .chat{
     height: 92vh;
 }

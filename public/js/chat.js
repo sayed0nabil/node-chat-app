@@ -22,6 +22,14 @@ socket.on('connect', function()  {
         }
     })
 });
+socket.on('updateUsersList', (users) => {
+    $('#users').remove();
+    const ol = $('<ol id="users"></ol>');
+    users.forEach(user => {
+        ol.append($(`<li>${user.name}</li>`));
+    })
+    $('#people_id').append(ol);
+})
 socket.on('newMessage', (message) => {
     const template = $('#message_template').html();
     let color = 'text-primary';
